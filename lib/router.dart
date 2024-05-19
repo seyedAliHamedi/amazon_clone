@@ -1,4 +1,4 @@
-import 'package:amazon_clone/core/common/screens/not_found_screen.dart';
+import 'package:amazon_clone/core/common/not_found_screen.dart';
 import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 

@@ -1,6 +1,8 @@
-import 'package:amazon_clone/core/common/widgets/custom_button.dart';
-import 'package:amazon_clone/core/common/widgets/custom_textfield.dart';
+import 'package:amazon_clone/core/common/show_snackbar.dart';
+import 'package:amazon_clone/core/widgets/custom_button.dart';
+import 'package:amazon_clone/core/widgets/custom_textfield.dart';
 import 'package:amazon_clone/core/ui.dart';
+import 'package:amazon_clone/features/auth/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
 enum Auth {
@@ -18,11 +20,21 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
+  AuthServices _service = AuthServices();
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+
+  void userSingUp() {
+    _service.signUpUser(
+      context: context,
+      name: _nameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+  }
 
   @override
   void dispose() {
@@ -92,7 +104,14 @@ class _AuthScreenState extends State<AuthScreen> {
                               hintText: "password",
                             ),
                             const SizedBox(height: 10),
-                            CustomButton(text: "Sing Up", onTap: () {})
+                            CustomButton(
+                              text: "Sing Up",
+                              onTap: () {
+                                if (_signUpFormKey.currentState!.validate()) {
+                                  userSingUp();
+                                }
+                              },
+                            )
                           ],
                         ),
                       ),
