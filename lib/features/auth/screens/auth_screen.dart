@@ -36,6 +36,14 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
+  void userSignIn() {
+    _service.singIn(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -142,7 +150,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 12),
                       child: Form(
-                        key: _signUpFormKey,
+                        key: _signInFormKey,
                         child: Column(
                           children: [
                             CustomTextField(
@@ -155,7 +163,13 @@ class _AuthScreenState extends State<AuthScreen> {
                               hintText: "password",
                             ),
                             const SizedBox(height: 10),
-                            CustomButton(text: "Sing In", onTap: () {})
+                            CustomButton(
+                                text: "Sing In",
+                                onTap: () {
+                                  if (_signInFormKey.currentState!.validate()) {
+                                    userSignIn();
+                                  }
+                                })
                           ],
                         ),
                       ),
