@@ -30,15 +30,15 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<dynamic, dynamic> map) {
+  factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['_id'] as String,
-      name: map['name'] as String,
-      email: map['email'] as String,
-      password: map['password'] as String,
-      address: ['address'] as String,
-      userType: map['userType'] as String,
-      token: map['token'] as String,
+      id: map['_id'] ?? "",
+      name: map['name'] ?? "",
+      email: map['email'] ?? "",
+      password: map['password'] ?? "",
+      address: map['address'] ?? "",
+      userType: map['userType'] ?? "",
+      token: map['token'] ?? "",
     );
   }
 

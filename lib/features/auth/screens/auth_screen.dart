@@ -3,6 +3,7 @@ import 'package:amazon_clone/core/widgets/custom_button.dart';
 import 'package:amazon_clone/core/widgets/custom_textfield.dart';
 import 'package:amazon_clone/core/ui.dart';
 import 'package:amazon_clone/features/auth/services/auth_services.dart';
+import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 enum Auth {
@@ -36,12 +37,14 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  void userSignIn() {
+  void userSignIn() async {
     _service.singIn(
       context: context,
       email: _emailController.text,
       password: _passwordController.text,
     );
+    Navigator.pushNamedAndRemoveUntil(
+        context, HomeScreen.routeName, (route) => false);
   }
 
   @override
@@ -164,12 +167,13 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                             const SizedBox(height: 10),
                             CustomButton(
-                                text: "Sing In",
-                                onTap: () {
-                                  if (_signInFormKey.currentState!.validate()) {
-                                    userSignIn();
-                                  }
-                                })
+                              text: "Sing In",
+                              onTap: () {
+                                if (_signInFormKey.currentState!.validate()) {
+                                  userSignIn();
+                                }
+                              },
+                            )
                           ],
                         ),
                       ),

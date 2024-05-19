@@ -4,9 +4,13 @@ import 'dart:convert';
 
 import 'package:amazon_clone/core/common/show_snackbar.dart';
 import 'package:amazon_clone/core/error_handling.dart';
+import 'package:amazon_clone/core/providers/user_provider.dart';
+import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthServices {
   void signUpUser({
@@ -59,7 +63,13 @@ class AuthServices {
       httpErrorHandling(
           response: response,
           context: context,
-          onSuccess: () => showSnackBar(context, "Logged IN"));
+          onSuccess: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(
+                'x-auth-key', jsonDecode(response.body)['token']);
+            Provider.of<UserProvider>(context, listen: false)
+                .setUser(response.body);
+          });
     } catch (e) {
       showSnackBar(context, e.toString());
     }
