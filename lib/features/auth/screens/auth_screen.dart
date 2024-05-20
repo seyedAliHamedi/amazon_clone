@@ -1,4 +1,5 @@
 import 'package:amazon_clone/core/common/show_snackbar.dart';
+import 'package:amazon_clone/core/widgets/bottom_bar.dart';
 import 'package:amazon_clone/core/widgets/custom_button.dart';
 import 'package:amazon_clone/core/widgets/custom_textfield.dart';
 import 'package:amazon_clone/core/ui.dart';
@@ -44,7 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
       password: _passwordController.text,
     );
     Navigator.pushNamedAndRemoveUntil(
-        context, HomeScreen.routeName, (route) => false);
+        context, BottomBar.routeName, (route) => false);
   }
 
   @override

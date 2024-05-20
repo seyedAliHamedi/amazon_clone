@@ -66,12 +66,46 @@ class AuthServices {
           onSuccess: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString(
-                'x-auth-key', jsonDecode(response.body)['token']);
+                'x-auth-token', jsonDecode(response.body)['token']);
             Provider.of<UserProvider>(context, listen: false)
                 .setUser(response.body);
           });
     } catch (e) {
       showSnackBar(context, e.toString());
+    }
+  }
+
+  void getUserData({
+    required BuildContext context,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("x-auth-token");
+      if (token == null) {
+        prefs.setString("x-auth-token", '');
+      }
+      http.Response toeknResponse = await http.post(
+        Uri.parse("http://127.0.0.1:8000/auth/validate-token"),
+        headers: <String, String>{
+          'Content-Type': "application/json; charset=UTF-8",
+          'x-auth-header': token!,
+        },
+      );
+      var response = jsonDecode(toeknResponse.body);
+      if (response) {
+        http.Response userRespone = await http.get(
+          Uri.parse("http://127.0.0.1:8000/authenticate"),
+          headers: <String, String>{
+            'Content-Type': "application/json; charset=UTF-8",
+            'x-auth-header': token,
+          },
+        );
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userRespone.body);
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
     }
   }
 }
