@@ -1,4 +1,4 @@
-import 'package:amazon_clone/core/ui.dart';
+import 'package:amazon_clone/core/widgets/custom_appbar.dart';
 import 'package:amazon_clone/features/account/widgets/below_appbar.dart';
 import 'package:amazon_clone/features/account/widgets/orders.dart';
 import 'package:amazon_clone/features/account/widgets/top_buttons.dart';
@@ -13,38 +13,21 @@ class AccountScreen extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: UI.appBarGradient,
+        child: CustomAppBar(
+          titleWidget: Container(
+            alignment: Alignment.topLeft,
+            child: Image.asset(
+              "assets/images/amazon_in.png",
+              width: 120,
+              height: 45,
+              color: Colors.black,
             ),
           ),
-          title: Row(
-            children: [
-              Container(
-                alignment: Alignment.topLeft,
-                child: Image.asset(
-                  "assets/images/amazon_in.png",
-                  width: 120,
-                  height: 45,
-                  color: Colors.black,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.notifications_outlined),
-                    SizedBox(width: 15),
-                    Icon(Icons.search)
-                  ],
-                ),
-              )
-            ],
-          ),
+          iconList: const [
+            Icon(Icons.notifications_outlined),
+            SizedBox(width: 15),
+            Icon(Icons.search)
+          ],
         ),
       ),
       body: const Column(
