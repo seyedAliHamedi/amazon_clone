@@ -1,3 +1,4 @@
+import 'package:amazon_clone/core/ui.dart';
 import 'package:flutter/material.dart';
 
 class DealOfDay extends StatelessWidget {
@@ -54,7 +55,18 @@ class DealOfDay extends StatelessWidget {
               )
             ],
           ),
-        )
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0, top: 10.0),
+          child: Text(
+            "see all",
+            style: TextStyle(
+              color: UI.selectedNavBarColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
       ],
     );
   }
