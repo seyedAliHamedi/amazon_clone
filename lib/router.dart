@@ -1,4 +1,4 @@
-import 'package:amazon_clone/core/common/not_found_screen.dart';
+import 'package:amazon_clone/core/utils.dart';
 import 'package:amazon_clone/core/widgets/bottom_bar.dart';
 import 'package:amazon_clone/features/admin/screens/add_product_modal.dart';
 import 'package:amazon_clone/features/admin/screens/admin_screen.dart';
@@ -36,7 +36,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     default:
       return MaterialPageRoute(
         settings: settings,
-        builder: (_) => const NotFoundScreen(),
+        builder: (_) => notFoundScreen(),
       );
   }
 }

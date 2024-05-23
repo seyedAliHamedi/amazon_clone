@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:amazon_clone/core/utils.dart';
 import 'package:amazon_clone/core/widgets/custom_appbar.dart';
 import 'package:amazon_clone/core/widgets/custom_button.dart';
 import 'package:amazon_clone/core/widgets/custom_textfield.dart';
+import 'package:amazon_clone/features/admin/services/admin_services.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AddProductModal extends StatefulWidget {
   const AddProductModal({super.key});
@@ -13,6 +19,8 @@ class AddProductModal extends StatefulWidget {
 }
 
 class _AddProductModalState extends State<AddProductModal> {
+  final AdminServices _services = AdminServices();
+
   final GlobalKey _formKey = GlobalKey();
 
   final TextEditingController _productNameController = TextEditingController();
@@ -29,6 +37,8 @@ class _AddProductModalState extends State<AddProductModal> {
     'Fashion',
   ];
   String selected_category = "Books";
+  List<File> images = [];
+
   @override
   void dispose() {
     _productNameController.dispose();
@@ -36,6 +46,24 @@ class _AddProductModalState extends State<AddProductModal> {
     _productPriceController.dispose();
     _productQuantityController.dispose();
     super.dispose();
+  }
+
+  void selectImages() async {
+    var res = await pickImages();
+    setState(() {
+      images = res;
+    });
+  }
+
+  void addProduct() async {
+    _services.sellProducts(
+        context: context,
+        productName: _productNameController.text,
+        productDescription: _productDescController.text,
+        productPrice: double.parse(_productPriceController.text),
+        productQty: double.parse(_productQuantityController.text),
+        category: selected_category,
+        images: images);
   }
 
   @override
@@ -61,34 +89,55 @@ class _AddProductModalState extends State<AddProductModal> {
             child: Column(
               children: [
                 const SizedBox(height: 30),
-                DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(12),
-                  dashPattern: const [20, 8],
-                  strokeCap: StrokeCap.round,
-                  child: Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.folder_open, size: 40),
-                        const SizedBox(height: 15),
-                        Text(
-                          "Select Images for the product",
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 15,
+                images.isNotEmpty
+                    ? CarouselSlider(
+                        items: images.map(
+                          (i) {
+                            return Builder(
+                              builder: (BuildContext context) => Image.file(
+                                i,
+                                fit: BoxFit.cover,
+                                height: 200,
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        options: CarouselOptions(
+                          viewportFraction: 1,
+                          height: 200,
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: selectImages,
+                        child: DottedBorder(
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(12),
+                          dashPattern: const [20, 8],
+                          strokeCap: StrokeCap.round,
+                          child: Container(
+                            width: double.infinity,
+                            height: 150,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.folder_open, size: 40),
+                                const SizedBox(height: 15),
+                                Text(
+                                  "Select Images for the product",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 15,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                        ),
+                      ),
                 const SizedBox(height: 30),
                 CustomTextField(
                   controller: _productNameController,
@@ -130,7 +179,7 @@ class _AddProductModalState extends State<AddProductModal> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                CustomButton(text: "Sell", onTap: () {})
+                CustomButton(text: "Sell", onTap: addProduct)
               ],
             ),
           ),

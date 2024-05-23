@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:amazon_clone/core/common/show_snackbar.dart';
+import 'package:amazon_clone/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +14,9 @@ void httpErrorHandling({
       onSuccess();
       break;
     case 400:
+      showSnackBar(context, jsonDecode(response.body)['msg']);
+      break;
+    case 401:
       showSnackBar(context, jsonDecode(response.body)['msg']);
       break;
     case 500:
