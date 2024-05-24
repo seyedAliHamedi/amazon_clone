@@ -1,4 +1,5 @@
 import 'package:amazon_clone/core/widgets/custom_appbar.dart';
+import 'package:amazon_clone/features/home/screens/search_screen.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
 import 'package:amazon_clone/features/home/widgets/categories.dart';
 import 'package:amazon_clone/features/home/widgets/crousel_image.dart';
@@ -27,6 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(8),
                 elevation: 1,
                 child: TextFormField(
+                  onFieldSubmitted: (value) {
+                    Navigator.pushNamed(
+                      context,
+                      SearchScreen.routeName,
+                      arguments: value,
+                    );
+                  },
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(2.5),
                     border: const OutlineInputBorder(
