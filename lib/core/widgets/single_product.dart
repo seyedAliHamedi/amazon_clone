@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class SingleProduct extends StatelessWidget {
   final String image;
-  const SingleProduct({super.key, required this.image});
+  final bool isLocalServer;
+  const SingleProduct(
+      {super.key, required this.image, this.isLocalServer = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +17,11 @@ class SingleProduct extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Container(
-          width: 180,
+          height: 180,
           padding: const EdgeInsets.all(10),
           child: Image.network(
-            image,
-            width: 180,
+            isLocalServer ? "http://127.0.0.1:8000/$image" : image,
+            height: 180,
             fit: BoxFit.fitHeight,
           ),
         ),

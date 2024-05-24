@@ -36,11 +36,11 @@ class Product {
     return Product(
       name: map['name'] ?? "",
       description: map['description'] ?? "",
-      price: map['price'] ?? 0.0,
-      quantity: map['quantity'] ?? 0.0,
+      price: map['price'] + 0.0,
+      quantity: map['quantity'] + 0.0,
       category: map['category'] ?? "",
-      imageUrls: map['imageUrls'] ?? [],
-      id: map['id'] != null ? map['id'] as String : null,
+      imageUrls: List<String>.from(map['imageUrls']),
+      id: map['_id'] != null ? map['_id'] as String : null,
     );
   }
 

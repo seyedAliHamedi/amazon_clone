@@ -8,6 +8,7 @@ import 'package:amazon_clone/core/utils.dart';
 import 'package:amazon_clone/models/product.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +50,6 @@ class AdminServices {
           context: context,
           onSuccess: () {
             showSnackBar(context, "Product Added succesfully");
-            Navigator.pop(context);
           });
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -72,5 +72,58 @@ class AdminServices {
     }
 
     return photoUrls;
+  }
+
+  Future<List<Product>> fetchProducts({required BuildContext context}) async {
+    List<Product> productList = [];
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("x-auth-token");
+
+      http.Response response = await http.get(
+        Uri.parse("http://127.0.0.1:8000/admin/products"),
+        headers: {
+          'Content-Type': "application/json; charset=UTF-8",
+          'x-auth-header': token!,
+        },
+      );
+      httpErrorHandling(
+        response: response,
+        context: context,
+        onSuccess: () {
+          var products = jsonDecode(response.body)['products'];
+          for (var i = 0; i < products.length; i++) {
+            productList.add(Product.fromMap(products[i]));
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return productList;
+  }
+
+  void deleteProduct(
+      {required BuildContext context, required String id}) async {
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String? token = pref.getString("x-auth-token");
+      http.Response response = await http.delete(
+        Uri.parse("http://127.0.0.1:8000/admin/products/${id}"),
+        headers: {
+          'Content-Type': "application/json; charset=UTF-8",
+          'x-auth-header': token!,
+        },
+      );
+      httpErrorHandling(
+        response: response,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, "succeeeeeeeeed");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

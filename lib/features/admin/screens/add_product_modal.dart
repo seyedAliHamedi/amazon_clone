@@ -5,6 +5,7 @@ import 'package:amazon_clone/core/widgets/custom_appbar.dart';
 import 'package:amazon_clone/core/widgets/custom_button.dart';
 import 'package:amazon_clone/core/widgets/custom_textfield.dart';
 import 'package:amazon_clone/features/admin/services/admin_services.dart';
+import 'package:amazon_clone/models/product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class AddProductModal extends StatefulWidget {
 class _AddProductModalState extends State<AddProductModal> {
   final AdminServices _services = AdminServices();
 
-  final GlobalKey _formKey = GlobalKey();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _productDescController = TextEditingController();
@@ -56,14 +57,23 @@ class _AddProductModalState extends State<AddProductModal> {
   }
 
   void addProduct() async {
-    _services.sellProducts(
+    if (_formKey.currentState!.validate() && images.isNotEmpty) {
+      _services.sellProducts(
         context: context,
         productName: _productNameController.text,
         productDescription: _productDescController.text,
         productPrice: double.parse(_productPriceController.text),
         productQty: double.parse(_productQuantityController.text),
         category: selected_category,
-        images: images);
+        images: images,
+      );
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
